@@ -1,10 +1,16 @@
-// webpack.config.js
-const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+// Load environment variables from .env file
+dotenv.config();
 
 module.exports = {
-  
+  // other webpack configurations...
+
   plugins: [
-    new Dotenv()
-  ]
-  
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
+    new dotenv()
+  ],
 };
