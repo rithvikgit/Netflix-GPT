@@ -16,6 +16,21 @@
 - Implemented Sign Out
 - Update Profile API
 - Fetch from TMB movies
+- BugFix: Sign Up displayName and Profile picture update
+- BugFix: If the user not logged in Redirect to login page and vice-versa
+- Unsubscribed to the onAuthStateChanged callback
+- Add hardcoded vaues to the constants file
+- Regisster TMDB API & create an app & get access token
+- Get Data from TMDB now playing mosvies list API
+- Custom Hook for Now Paying Movies
+- Create movieSlice
+- Update Store with movies Data
+- Planning for Main Container and Secondary container
+- Fetch Data for Trailer Video
+- Update Store with Trailer Video data
+- Encoded the youtube Video and make it autoplay and mute
+- Tailwind classes to make Main Container look moodern
+
 
 ## Features
 
