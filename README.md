@@ -39,6 +39,13 @@
 - GPT Search Paage
 - GPT Search Bar
 - (Feature) Multi-langunage Feature in our App
+- Get Open AI Api Key
+- Gpt Search API Call
+- Fetched gptMoviesSuggestions from TMDB
+- Created gptSlice added data
+- Resused Movie List component to make movie suggestion container
+- Memoization
+
 
 
 ## Features

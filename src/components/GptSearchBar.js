@@ -1,18 +1,84 @@
-import React from "react";
+import React, { useRef } from "react";
 import lang from "../utils/languageConstants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import openai from "../utils/openai";
+import { API_OPTIONS } from "../utils/constants";
+import { addGptMoviesResult } from "../utils/gptSlice";
 
 const GptSearchBar = () => {
   const langKey = useSelector((store) => store.config.lang);
+  const searchText = useRef(null);
+  const dispatch = useDispatch();
+
+  //search movie in tmdb databse
+  const searchMovieTMDB = async (movie) => {
+    const data = await fetch(
+      "https://api.themoviedb.org/3/search/movie?query=" +
+        movie +
+        "&include_adult=false&language=en-US&page=1",
+      API_OPTIONS
+    );
+    const json = await data.json();
+
+    return json.results;
+  };
+
+  const handleGptSearch = async () => {
+    console.log(searchText.current.value);
+
+    const gptQuery =
+      "Act as a Movie Recommendation system and suggest some movies for the query : " +
+      searchText.current.value +
+      "only give me names of 5 movies, comma seperated like the example result give ahead. Example Result: Fight Club, Deadpool";
+
+    /**
+       * gpt code 
+       * commented this because free api not available anymore
+      const gptResults = await openai.chat.completions.create({
+        messages: [{ role: "user", content: gptQuery }],
+        model: "gpt-3.5-turbo",
+      });
+
+      if (!gptResults.choices) {
+        <h1>Oppssie</h1>;
+      }
+
+      console.log(gptResults.choices?.[0]?.message?.content);
+
+      const gptMovies = gptResults.choices?.[0]?.message?.content.split(",");
+
+       */
+
+    const gptMovies = ["Deadpool", "Fight Club", ""];
+
+    //For each movie I will search TMDB API
+    const promiseArray = gptMovies.map((movie) => searchMovieTMDB(movie));
+    //[promise, promise, promise]
+
+    const tmdbResults = await Promise.all(promiseArray);
+    // console.log(tmdbResults);
+
+    dispatch(
+      addGptMoviesResult({ movieNames: gptMovies, movieResults: tmdbResults })
+    );
+  };
+
   return (
     <div className="pt-[10%] flex justify-center ">
-      <form className="w-1/2 bg-slate-700 grid grid-cols-12 ">
+      <form
+        className="w-1/2 bg-slate-700 grid grid-cols-12 "
+        onSubmit={(e) => e.preventDefault()}
+      >
         <input
+          ref={searchText}
           type="text"
           className="p-4 m-4 col-span-9"
-          placeholder={lang[langKey].gptSearchPlaceHolder}  
+          placeholder={lang[langKey].gptSearchPlaceHolder}
         />
-        <button className="col-span-3 m-4 py-2 px-4 bg-red-700 text-white rounded-lg">
+        <button
+          className="col-span-3 m-4 py-2 px-4 bg-red-700 text-white rounded-lg"
+          onClick={handleGptSearch}
+        >
           {lang[langKey].search}
         </button>
       </form>
