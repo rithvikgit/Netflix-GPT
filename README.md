@@ -45,6 +45,8 @@
 - Created gptSlice added data
 - Resused Movie List component to make movie suggestion container
 - Memoization
+- Added Webpack .env
+- Made our Site Responsive
 
 
 
